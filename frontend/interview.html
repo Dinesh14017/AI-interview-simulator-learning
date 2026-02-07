@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts: Inter for clean UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                <span>Interviewer.ai</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="interview.html" class="active">Simulator</a>
+                <a href="companies.html">Companies</a>
+                <a href="aptitude.html">Aptitude</a>
+            </div>
+            <button id="restart-btn" class="nav-cta"
+                style="display: none; margin-right: 1rem; font-size: 0.9rem; padding: 0.5rem 1rem;">New Session</button>
+            <div class="status-indicator" id="connection-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Ready</span>
+            </div>
+        </nav>
+
+        <div class="chat-layout">
+            <!-- Company Detail Sidebar (Hidden by default) -->
+            <aside class="vacancy-panel" id="vacancy-panel" style="display: none;">
+                <div class="company-brand" id="company-brand">
+                    <div class="company-logo-placeholder">C</div>
+                    <h2 id="sidebar-company-name">Company</h2>
+                </div>
+
+                <div class="vacancy-details">
+                    <div class="detail-item">
+                        <label>Role</label>
+                        <p id="sidebar-role">Software Engineer</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Package</label>
+                        <p id="sidebar-salary">₹4 - 8 LPA</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Location</label>
+                        <p>Bangalore / Hybrid</p>
+                    </div>
+
+                    <div class="interview-process">
+                        <h3>Interview Rounds</h3>
+                        <ul class="process-list">
+                            <li class="active">1. Aptitude & Logic</li>
+                            <li>2. Technical Round 1</li>
+                            <li>3. Managerial / HR</li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Chat Area -->
+            <main class="chat-main" id="chat-container">
+                <!-- Intro / Welcome State -->
+                <div class="welcome-state" id="welcome-message">
+                    <h2>Ready for your interview?</h2>
+                    <p>Select your role and difficulty level to begin a realistic practice session powered by AI.</p>
+                </div>
+                <!-- Messages injected here -->
+            </main>
+        </div>
+
+        <!-- Input Area -->
+        <footer class="chat-input-area">
+            <div class="typing-indicator hidden" id="typing-indicator">
+                <span>AI is typing</span>
+                <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div>
+
+            <div class="input-wrapper disabled">
+                <textarea id="user-input" placeholder="Select a role to start..." rows="1" disabled></textarea>
+                <button id="send-btn" disabled>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                    </svg>
+                </button>
+            </div>
+        </footer>
+
+        <!-- Setup Overlay (Modal) -->
+        <div class="modal-overlay" id="start-modal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h2>Start New Session</h2>
+                    <p>Configure your mock interview</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Role</label>
+                    <div class="select-wrapper">
+                        <select id="role-select">
+                            <option value="software_engineer">Software Engineer</option>
+                            <option value="product_manager">Product Manager</option>
+                            <option value="data_scientist">Data Scientist</option>
+                        </select>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Company</label>
+                    <div class="select-wrapper">
+                        <select id="company-select">
+                            <option value="Generic">Generic (Standard)</option>
+                            <option value="TCS">TCS</option>
+                            <option value="Infosys">Infosys</option>
+                            <option value="Wipro">Wipro</option>
+                            <option value="Amazon">Amazon</option>
+                            <option value="Zoho">Zoho</option>
+                            <option value="Accenture">Accenture</option>
+                        </select>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Difficulty Level</label>
+                    <div class="difficulty-options">
+                        <label class="radio-label">
+                            <input type="radio" name="difficulty" value="easy">
+                            <span class="radio-btn">Easy</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="difficulty" value="medium" checked>
+                            <span class="radio-btn">Medium</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="difficulty" value="hard">
+                            <span class="radio-btn">Hard</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="primary-btn pulse-animation">
+                    Start Interview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
